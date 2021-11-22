@@ -7,56 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        body {
-            width: 100vw;
-            height: 100vh;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient( to bottom, #760000, black);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #loginForm {
-            background-color:black;
-            width: 30%;
-            height: 60%;
-            color: white;
-            font-size: 36px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-evenly;
-        }
-
-        .idPw {
-            background-color: black;
-            color: white;
-            border: 0;
-            border-bottom: solid white;
-        }
-
-        .idPw:focus {
-            outline: 0;
-            border-bottom: solid red;
-        }
-
-        #loginButton {
-            width: 100px;
-            height: 50px;
-            font-size: 16px;
-            border: 0;
-            color: white;
-            background-color: #760000;
-        }
-
-        #loginButton:hover {
-            cursor: pointer;
-        }
-
-    </style>
+    <link rel="stylesheet" type="text/css" href="./index.css">
 </head>
 <body>
     <form id="loginForm" action="auth.jsp" method="post">

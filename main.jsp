@@ -121,28 +121,27 @@
     </main>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        var plusDate;
         var plusMonth = 0;
         var plusDay = 0;
-        var plusHour = 12;
-        var plusMin = 0;
-        var plusAmPm = "AM"//매개변수 처리
 
-        flatpickr("#plusMonthDay", {
-            dateFormat: "n월 j일",
-            onChange: function(selectDates, dateStr, instance){
-                plusDate = new Date(selectDates);
-                plusMonth = plusDate.getMonth() + 1;
-                plusDay = plusDate.getDate();
-            }
-        });
+        window.onload = function() {
+            flatpickr("#plusMonthDay", {
+                dateFormat: "n월 j일",
+                onChange: function(selectDates, dateStr, instance){
+                    var plusDate = new Date(selectDates);
+                    plusMonth = plusDate.getMonth() + 1;
+                    plusDay = plusDate.getDate();
+                }
+            });
 
-        updateTime();
+            updateTime(12, 0);
+            changeAmPm();
 
-        console.log("<%=rsRow%>");
-        console.log("<%=content[0][0]%>");
+            console.log("<%=rsRow%>");
+            console.log("<%=content[0][0]%>");
 
-        setSchedule();//window.onload
+            setSchedule();
+        }
 
         function setSchedule() {
             var newSchedule = document.createElement("button");
@@ -179,21 +178,26 @@
             }
         }
 
-        function updateTime() {
+        function updateTime(plusHour, plusMin) {
             document.getElementById("plusDialHour").innerHTML = plusHour;
-            document.getElementById("plusDialMin").innerHTML = plusMin + "0";
-            document.getElementById("plusDialAmPm").innerHTML = plusAmPm;
+            if (plusMin == 0) {
+                document.getElementById("plusDialMin").innerHTML = "00";
+            } else {
+                document.getElementById("plusDialMin").innerHTML = plusMin;
+            }
         }
 
         function changeAmPm() {
-            if (plusAmPm == "AM") {
-                plusAmPm = "PM";
+            if (document.getElementById("plusDialAmPm").innerHTML == "AM") {
+                document.getElementById("plusDialAmPm").innerHTML = "PM";
             } else {
-                plusAmPm = "AM";
+                document.getElementById("plusDialAmPm").innerHTML = "AM";
             }
         }
 
         function hourUp() {
+            var plusHour =  document.getElementById("plusDialHour").innerHTML * 1;
+            var plusMin = document.getElementById("plusDialMin").innerHTML * 1;
             if (plusHour == 12) {
                 plusHour = 1;
             } else {
@@ -202,10 +206,12 @@
                     changeAmPm();
                 }
             }
-            updateTime();
+            updateTime(plusHour, plusMin);
         }
 
         function hourDown() {
+            var plusHour =  document.getElementById("plusDialHour").innerHTML * 1;
+            var plusMin = document.getElementById("plusDialMin").innerHTML * 1;
             if (plusHour == 1) {
                 plusHour = 12;
             } else {
@@ -214,32 +220,35 @@
                     changeAmPm();
                 }
             }
-            updateTime();
+            updateTime(plusHour, plusMin);
         }
 
         function minUp() {
-            if (plusMin == 5) {
+            var plusHour =  document.getElementById("plusDialHour").innerHTML * 1;
+            var plusMin = document.getElementById("plusDialMin").innerHTML * 1;
+            if (plusMin == 50) {
                 plusMin = 0;
                 hourUp();
             } else {
-                plusMin++;
+                plusMin += 10;
             }
-            updateTime();
+            updateTime(plusHour, plusMin);
         }
 
         function minDown() {
+            var plusHour =  document.getElementById("plusDialHour").innerHTML * 1;
+            var plusMin = document.getElementById("plusDialMin").innerHTML * 1;
             if (plusMin == 0) {
-                plusMin = 5;
+                plusMin = 50;
                 hourDown();
             } else {
-                plusMin--;
+                plusMin -= 10;
             }
-            updateTime();
+            updateTime(plusHour, plusMin);
         }
 
         function amPmClick() {
             changeAmPm();
-            updateTime();
         }
 
         function plusConfirm() {

@@ -36,12 +36,19 @@
         isLogin = true;
     }
     seqString = Integer.toString(seq);
+
+    session.setMaxInactiveInterval(60 * 60 * 24);
+    String sessionId = session.getId();
+    session.setAttribute(sessionId, seqString);
+    String sessionValue = (String)session.getAttribute(sessionId);
 %>
 
 <%-- 페이지 이동 --%>
 <script>
     if (<%=isLogin%> == true) {
-        setCookie("client", "<%=seqString%>", 1);
+        setCookie("account", "<%=sessionId%>", 1);
+        // setCookie("value",  "<%=sessionValue%>", 1)
+        // sessionStorage.setItem("seq", <%=seq%>);
         location.href = "main.jsp";
     } else if (<%=isLogin%> == false) {
         alert("로그인 정보가 일치하지 않습니다.");

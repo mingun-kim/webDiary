@@ -10,12 +10,30 @@
     PreparedStatement pstmt = null;
     ResultSet rs = null;
 
+    Cookie[] cookies = request.getCookies();
+    String cValue = null;
+
+    boolean isLogin = false;
+
+    for (int i = 0; i < cookies.length; i++) {
+        Cookie c = cookies[i];
+        if (c.getName().equals("account")) {
+                cValue = c.getValue();
+        }
+    }
+
+    String sessionValue = (String)session.getAttribute(cValue);
+
+    if (cValue != null && sessionValue != null) {
+        isLogin = true;
+    }
+
     Class.forName("com.mysql.jdbc.Driver");
     conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/diarydata?useUnicode=true&characterEncoding=UTF-8" , "ubuntu", "1234");
 
     String sql = "SELECT * FROM diarycontent WHERE account=?";
     pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-    pstmt.setString(1, "1");
+    pstmt.setString(1, sessionValue);
     rs = pstmt.executeQuery();
 
     rs.last();
@@ -41,10 +59,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style></style>
+    <link rel="stylesheet" type="text/css" href="./common.css">
     <link rel="stylesheet" type="text/css" href="./main.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    
 </head>
 <body>
     <nav>
@@ -88,7 +105,7 @@
                     <button class="plusDialUpDown" onclick=hourUp()>
                         <img src="./src/images/arrowUp.png" class="plusDialUpDownImg">
                     </button>
-                    <span id="plusDialHour"></span>
+                    <span id="plusDialHour" class="plusDialText"></span>
                     <button class="plusDialUpDown" onclick=hourDown()>
                         <img src="./src/images/arrowDown.png" class="plusDialUpDownImg">
                     </button>
@@ -98,12 +115,12 @@
                     <button class="plusDialUpDown" onclick=minUp()>
                         <img src="./src/images/arrowUp.png" class="plusDialUpDownImg">
                     </button>
-                    <span id="plusDialMin"></span>
+                    <span id="plusDialMin" class="plusDialText"></span>
                     <button class="plusDialUpDown" onclick=minDown()>
                         <img src="./src/images/arrowDown.png" class="plusDialUpDownImg">
                     </button>
                 </div>
-                <div class="plusTimeDial">
+                <div class="plusTimeDial" class="plusDialText">
                     <button class="plusDialUpDown" onclick=amPmClick()>
                         <img src="./src/images/arrowUp.png" class="plusDialUpDownImg">
                     </button>
@@ -125,22 +142,27 @@
         var plusDay = 0;
 
         window.onload = function() {
-            flatpickr("#plusMonthDay", {
-                dateFormat: "n월 j일",
-                onChange: function(selectDates, dateStr, instance){
-                    var plusDate = new Date(selectDates);
-                    plusMonth = plusDate.getMonth() + 1;
-                    plusDay = plusDate.getDate();
-                }
-            });
+            if (<%=isLogin%> == false) {
+                alert("먼저 로그인 해주십시오.")
+                location.href = "index.jsp";
+            } else {
+                flatpickr("#plusMonthDay", {
+                    dateFormat: "n월 j일",
+                    onChange: function(selectDates, dateStr, instance){
+                        var plusDate = new Date(selectDates);
+                        plusMonth = plusDate.getMonth() + 1;
+                        plusDay = plusDate.getDate();
+                    }
+                });
 
-            updateTime(12, 0);
-            changeAmPm();
+                updateTime(12, 0);
+                changeAmPm();
 
-            console.log("<%=rsRow%>");
-            console.log("<%=content[0][0]%>");
+                console.log("<%=rsRow%>");
+                console.log("<%=content[0][0]%>");
 
-            setSchedule();
+                setSchedule();
+            }
         }
 
         function setSchedule() {

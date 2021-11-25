@@ -1,0 +1,22 @@
+:root {
+    --mainColor: #9A0000;
+    --subColor: #580000;
+    color: white;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+button {
+    background-color: #00000000;
+    border: 0;
+}
+
+button:hover {
+    cursor: pointer;
+}

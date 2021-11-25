@@ -1,10 +1,5 @@
 body {
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
     background: linear-gradient( to bottom, #760000, black);
-    display: flex;
     justify-content: center;
     align-items: center;
 }
@@ -34,7 +29,6 @@ height: 100%;
 }
 
 .editUserText {
-color: white;
 height: 100%;
 display: flex;
 justify-content: flex-end;
@@ -43,7 +37,6 @@ align-items: center;
 
 .editUserInput {
 background-color: black;
-color: white;
 border: 0;
 border-bottom: solid white;
 }
@@ -61,24 +54,20 @@ justify-content: space-evenly;
 
 .authorityButton {
 background-color: black;
-color: #9A0000;
-border: solid #9A0000 3px;
+color: var(--mainColor);
+border: solid var(--mainColor) 3px;
 font-size: 16px;
 }
 
-.authorityButton:hover {
-cursor: pointer;
-}
-
 .authorityButton:focus {
-background-color: #9A0000;
+background-color: var(--mainColor);
 color: white;
 }
 
 #deleteUserList {
 width: 60%;
 height: 75%;
-background-color: #9A0000;
+background-color: var(--mainColor);
 display: block;
 margin-left: auto;
 margin-right: auto;
@@ -87,29 +76,17 @@ margin-right: auto;
 .createDeleteButton {
 width: 100px;
 height: 50px;
-background-color: #9A0000;
-color: white;
-border: 0;
+background-color: var(--mainColor);
 font-size: 16px;
 display: block;
 margin-left: auto;
 margin-right: auto;
 }
 
-.createDeleteButton:hover {
-cursor: pointer;
-}
-
 #logoutButton {
-background-color: #00000000;
-border: 0;
 position: absolute;
 top: 4px;
 right: 4px;
-}
-
-#logoutButton:hover {
-cursor: pointer;
 }
 
 #logoutButtonImg {
@@ -119,15 +96,9 @@ object-fit: contain;
 }
 
 #backButton {
-background-color: #00000000;
-border: 0;
 position: absolute;
 top: 4px;
 left: 4px;
-}
-
-#backButton:hover {
-cursor: pointer;
 }
 
 #backButtonImg {

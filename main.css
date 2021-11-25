@@ -1,15 +1,10 @@
 body {
     background-color: black;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    width: 100vw;
-    height: 100vh;
     overflow: hidden;
 }
 
 nav {
-    background-color: #9A0000;
+    background-color: var(--mainColor);
     width: 100px;
     height: 100vh;
     display: flex;
@@ -28,19 +23,14 @@ nav {
     width: 100px;
     height: 64px;
     border: 0;
-    background-color: #580000;
-    color: white;
+    background-color: var(--subColor);
     font-size: 16px;
-}
-
-#editUserButton:hover {
-    cursor: pointer;
 }
 
 header {
     width: 100vw;
     height: 80px;
-    border-bottom: solid #580000 5px;
+    border-bottom: solid var(--subColor) 5px;
     display: flex;
     align-items: center;
     position: fixed;
@@ -51,28 +41,15 @@ header {
     width: 64px;
     height: 64px;
     background-color: black;
-    color: #9A0000;
-    border: solid #9A0000 3px;
+    color: var(--mainColor);
+    border: solid var(--mainColor) 3px;
     border-radius: 50%;
     font-size: 20px;
 }
 
-.monthButton:hover {
-    cursor: pointer;
-}
-
 .monthButton:focus {
-    background-color: #9A0000;
+    background-color: var(--mainColor);
     color: white;
-}
-
-.LRButton {
-    background-color: #00000000;
-    border: 0;
-}
-
-.LRButton:hover {
-    cursor: pointer;
 }
 
 .LRButtonImg {
@@ -88,13 +65,7 @@ header {
 }
 
 #logoutButton {
-    background-color: #00000000;
-    border: 0;
     margin-right: 100px;
-}
-
-#logoutButton:hover {
-    cursor: pointer;
 }
 
 #logoutButtonImg {
@@ -131,16 +102,10 @@ header {
 }
 
 #plusButton {
-    background-color: #00000000;
-    border: 0;
     position: fixed;
     top: 100px;
     right: 0px;
     z-index: 2;
-}
-
-#plusButton:hover {
-    cursor: pointer;
 }
 
 #plusButtonImg {
@@ -152,7 +117,6 @@ header {
 #plusMonthDay {
     background-color: black;
     width: 150px;
-    color: white;
     font-size: 32px;
 }
 
@@ -163,23 +127,13 @@ header {
     border-radius: 8px;
 }
 
-.plusDialUpDown {
-    background-color: #00000000;
-    border: 0;
-}
-
-.plusDialUpDown:hover {
-    cursor: pointer;
-}
-
 .plusDialUpDownImg {
     width: 24px;
     height: 16px;
     object-fit: cover;
 }
 
-#plusDialHour {
-    color: white;
+.plusDialText {
     font-size: 24px;
     height: 24px;
     position: relative;
@@ -188,26 +142,7 @@ header {
 }
 
 #plusColon {
-    color: white;
     font-size: 32px;
-}
-
-#plusDialMin {
-    color: white;
-    font-size: 24px;
-    height: 24px;
-    position: relative;
-    bottom: 6px;
-    text-align: center;
-}
-
-#plusDialAmPm {
-    color: white;
-    font-size: 24px;
-    height: 24px;
-    position: relative;
-    bottom: 6px;
-    text-align: center;
 }
 
 #plusText {
@@ -215,7 +150,6 @@ header {
     align-self: stretch;
     flex-grow: 1;
     background-color: black;
-    color: white;
     border: 1px solid white;
     font-size: 18px;
     border-radius: 8px;
@@ -231,15 +165,9 @@ header {
     height: 80px;
     align-self: flex-end;
     margin: 8px;
-    background-color: #9A0000;
-    color: white;
-    border: 0;
+    background-color: var(--mainColor);
     font-size: 20px;
     border-radius: 8px;
-}
-
-#plusConfirm:hover {
-    cursor: pointer;
 }
 
 main {
@@ -260,28 +188,20 @@ main {
 
 .schedule {
     background-color: black;
-    color: white;
-    border: 0;
     font-size: 24px;
     padding: 8px;
     margin-left: 16px;
 }
 
-.schedule:hover {
-    cursor: pointer;
-}
-
 .scheduleContent {
     background-color: black;
-    color: white;
-    border: 1px solid #570000;
+    border: 1px solid var(--subColor);
     flex-grow: 1;
     margin-right: 130px;
 }
 
 .scheduleTime {
     background-color: black;
-    color: white;
-    border: 1px solid #570000;
+    border: 1px solid var(--subColor);
     padding-right: 16px;
 }

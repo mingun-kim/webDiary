@@ -118,6 +118,7 @@ header {
     background-color: black;
     width: 150px;
     font-size: 32px;
+    border: 1px solid white;
 }
 
 .plusTimeDial {

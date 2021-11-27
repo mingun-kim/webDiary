@@ -1,7 +1,6 @@
 :root {
     --mainColor: #9A0000;
     --subColor: #580000;
-    color: white;
 }
 
 body {
@@ -18,5 +17,18 @@ button {
 }
 
 button:hover {
+    cursor: pointer;
+}
+
+div, input, button, span, form {
+    color: white;
+}
+
+input {
+    background-color: #00000000;
+    border: 0;
+}
+
+input:hover {
     cursor: pointer;
 }

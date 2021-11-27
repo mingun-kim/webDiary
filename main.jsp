@@ -59,9 +59,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" type="text/css" href="./common.css">
     <link rel="stylesheet" type="text/css" href="./main.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
     <nav>
@@ -124,7 +124,7 @@
                     <button class="plusDialUpDown" onclick=amPmClick()>
                         <img src="./src/images/arrowUp.png" class="plusDialUpDownImg">
                     </button>
-                    <span id="plusDialAmPm"></span>
+                    <span id="plusDialAmPm" class="plusDialText"></span>
                     <button class="plusDialUpDown" onclick=amPmClick()>
                         <img src="./src/images/arrowDown.png" class="plusDialUpDownImg">
                     </button>
@@ -141,11 +141,18 @@
         var plusMonth = 0;
         var plusDay = 0;
 
-        window.onload = function() {
-            if (<%=isLogin%> == false) {
-                alert("먼저 로그인 해주십시오.")
-                location.href = "index.jsp";
-            } else {
+        if (<%=isLogin%> == false) {
+            console.log("<%=rsRow%>");
+            alert("<%=isLogin%>")
+            alert("먼저 로그인 해주십시오.")
+            location.href = "index.jsp";
+        } else if (<%=isLogin%> == true) {
+            window.onload = function() {
+                startDiary();
+            }
+        }
+
+        function startDiary() {
                 flatpickr("#plusMonthDay", {
                     dateFormat: "n월 j일",
                     onChange: function(selectDates, dateStr, instance){
@@ -154,18 +161,17 @@
                         plusDay = plusDate.getDate();
                     }
                 });
-
+            
                 updateTime(12, 0);
                 changeAmPm();
 
                 console.log("<%=rsRow%>");
-                console.log("<%=content[0][0]%>");
 
                 setSchedule();
-            }
         }
 
         function setSchedule() {
+            //content불러올 때 rsRow 검사하고 0이면 불러오지 말기(없는데 불러오면 배열 벗어나는 에러남)
             var newSchedule = document.createElement("button");
             newSchedule.setAttribute("class", "schedule");
             newSchedule.setAttribute("onclick", "viewSchedule();");

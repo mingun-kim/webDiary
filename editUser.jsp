@@ -1,4 +1,51 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.sql.Connection"%>
+<%@ page import="java.sql.PreparedStatement"%>
+<%@ page import="java.sql.DriverManager"%>
+<%@ page import="java.sql.ResultSet"%>
+
+<%
+    request.setCharacterEncoding("utf-8");
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+
+    Cookie[] cookies = request.getCookies();
+    String cValue = null;
+
+    boolean isLogin = false;
+    
+    for (int i = 0; i < cookies.length; i++) {
+        Cookie c = cookies[i];
+        if (c.getName().equals("account")) {
+                cValue = c.getValue();
+        }
+    }
+
+    String sessionValue = (String)session.getAttribute(cValue);
+
+    if (cValue != null && sessionValue.equals("1")) {
+        isLogin = true;
+    }
+
+    Class.forName("com.mysql.jdbc.Driver");
+    conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/diarydata?useUnicode=true&characterEncoding=UTF-8" , "ubuntu", "1234");
+
+    String sql = "SELECT * FROM user_login";
+    pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+    rs = pstmt.executeQuery();
+    
+    rs.last();
+    int userIdRow = rs.getRow();
+    rs.beforeFirst();
+    String userId[] = new String[userIdRow];
+    
+    int i = 0;
+    while (rs.next()) {
+        userId[i] = rs.getString("account");
+        i++;
+    }
+%>
 
 <!DOCTYPE html>
 <html lang="kr">
@@ -56,6 +103,22 @@
         <img src="./src/images/backArrow.png" id="backButtonImg" onclick=backToDiary()>
     </button>
     <script>
+        window.onload = function() {
+            if (<%=isLogin%>) {
+                <%for (int count = 1; count < userIdRow; count++) {%>
+                    var newUserId = document.createElement("button");
+                    newUserId.setAttribute("class", "mvUserButton");
+                    newUserId.setAttribute("onclick", "mvUser(" + "<%=count + 1%>" + ")");
+                    newUserId.innerHTML = "<%=userId[count]%>"
+                    document.getElementById("deleteUserList").appendChild(newUserId);
+                <%}%>
+
+            } else {
+                alert("로그인 상태를 확인해주십시오.");
+                location.href="index.jsp"
+            }
+        }
+
         function setPower(power) {
             document.getElementById("innerCreatePower").value=power;
 

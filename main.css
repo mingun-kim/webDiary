@@ -190,6 +190,7 @@ header {
 }
 
 #plusText {
+    color: white;
     margin: 8px;
     align-self: stretch;
     flex-grow: 1;

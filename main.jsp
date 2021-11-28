@@ -154,7 +154,7 @@
             <input type="button" value="12" class="monthButton" onclick=mvMonth(12)>
         </div>
         <div id="logoutButtonDiv">
-            <button id="logoutButton">
+            <button id="logoutButton" onclick=logout()>
                 <img src="./src/images/logoutButton.png" id="logoutButtonImg">
             </button>
         </div>
@@ -201,7 +201,7 @@
                     </button>
                 </div>
             </div>
-            <input type="text" id="plusText" name="plusContent">
+            <textarea id="plusText" name="plusContent" cols="50" rows="10" wrap="hard"></textarea>
             <input type="button" value="확인" id="plusConfirm" onclick=confirmPlus()>
         </form>
     </div>
@@ -460,12 +460,6 @@
         function confirmPlus() {
             if (document.getElementById("innerPlusYear").value == "" || document.getElementById("innerPlusMonth").value == "" || document.getElementById("innerPlusDay").value == "") {
                 alert("날짜를 선택해 주십시오.");
-                if (document.getElementById("plusDialAmPm").innerHTML == "PM") {
-                    document.getElementById("innerPlusHour").value = document.getElementById("plusDialHour").innerHTML * 1 + 12;
-                } else {
-                    document.getElementById("innerPlusHour").value = document.getElementById("plusDialHour").innerHTML;
-                }
-                console.log(document.getElementById("innerPlusHour").value);
             } else {
                 if (document.getElementById("plusDialAmPm").innerHTML == "PM") {
                     document.getElementById("innerPlusHour").value = document.getElementById("plusDialHour").innerHTML * 1 + 12;
@@ -479,6 +473,9 @@
                     document.getElementById("innerPlusMin").value = document.getElementById("plusDialMin").innerHTML;
                 }
 
+                var submitText = document.getElementById("plusText").value;
+                document.getElementById("plusText").value = submitText;
+
                 document.getElementById("plusSchedule").submit();
             }
         }
@@ -490,6 +487,15 @@
             } else {
                 document.getElementById("scheduleContentDiv" + divId).style.display = "flex";
             }
+        }
+
+        function logout() {
+            deleteCookie("account");
+            location.href = "index.jsp";   
+        }
+        
+        function deleteCookie(name) {
+            document.cookie = name + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;";
         }
     </script>
 </body>

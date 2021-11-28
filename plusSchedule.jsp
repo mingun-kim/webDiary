@@ -19,6 +19,7 @@
     String hour = request.getParameter("innerPlusHour");
     String min = request.getParameter("innerPlusMin");
     String content = request.getParameter("plusContent");
+    content = content.replaceAll("(\r\n|\r|\n|\n\r)", "<br/>&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;");
 
     for (int i = 0; i < cookies.length; i++) {
         Cookie c = cookies[i];

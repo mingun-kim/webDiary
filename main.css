@@ -159,7 +159,7 @@ header {
 
 #plusMonthDay {
     background-color: black;
-    width: 150px;
+    width: 160px;
     font-size: 32px;
     border: 1px solid white;
 }
@@ -238,16 +238,11 @@ main {
 .scheduleContentDiv {
     display: none;
     width: 100%;
-    flex-direction: row;
-}
-
-.scheduleTime {
-    width: 100px;
-    border: 1px solid var(--subColor);
+    flex-direction: column;
 }
 
 .scheduleContent {
-    flex-grow: 1;
+    align-self: stretch;
     border: 1px solid var(--subColor);
     margin-right: 140px;
 }

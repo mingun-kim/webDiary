@@ -113,7 +113,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
     <link rel="stylesheet" type="text/css" href="./common.css">
     <link rel="stylesheet" type="text/css" href="./main.css">
 </head>
@@ -163,41 +163,47 @@
         <button id="plusButton">
             <img src="./src/images/plus.png" id="plusButtonImg" onclick=plusSchedule()>
         </button>
-        <div id="plusSchedule">
+        <form id="plusSchedule" action="plusSchedule.jsp" method="post">
+            <input id="innerPlusYear" name="innerPlusYear" type="text" class="innerData">
+            <input id="innerPlusMonth" name="innerPlusMonth" type="text" class="innerData">
+            <input id="innerPlusDay" name="innerPlusDay" type="text" class="innerData">
+            <input id="innerPlusHour" name="innerPlusHour" type="text" class="innerData">
+            <input id="innerPlusMin" name="innerPlusMin" type="text" class="innerData">
+
             <div id="plusTime">
                 <input id="plusMonthDay">
                 <div class="plusTimeDial">
-                    <button class="plusDialUpDown" onclick=hourUp()>
+                    <button type="button" class="plusDialUpDown" onclick=hourUp()>
                         <img src="./src/images/arrowUp.png" class="plusDialUpDownImg">
                     </button>
                     <span id="plusDialHour" class="plusDialText"></span>
-                    <button class="plusDialUpDown" onclick=hourDown()>
+                    <button type="button" class="plusDialUpDown" onclick=hourDown()>
                         <img src="./src/images/arrowDown.png" class="plusDialUpDownImg">
                     </button>
                 </div>
                 <span id="plusColon">:</span>
                 <div class="plusTimeDial">
-                    <button class="plusDialUpDown" onclick=minUp()>
+                    <button type="button" class="plusDialUpDown" onclick=minUp()>
                         <img src="./src/images/arrowUp.png" class="plusDialUpDownImg">
                     </button>
                     <span id="plusDialMin" class="plusDialText"></span>
-                    <button class="plusDialUpDown" onclick=minDown()>
+                    <button type="button" class="plusDialUpDown" onclick=minDown()>
                         <img src="./src/images/arrowDown.png" class="plusDialUpDownImg">
                     </button>
                 </div>
                 <div class="plusTimeDial" class="plusDialText">
-                    <button class="plusDialUpDown" onclick=amPmClick()>
+                    <button type="button" class="plusDialUpDown" onclick=amPmClick()>
                         <img src="./src/images/arrowUp.png" class="plusDialUpDownImg">
                     </button>
                     <span id="plusDialAmPm" class="plusDialText"></span>
-                    <button class="plusDialUpDown" onclick=amPmClick()>
+                    <button type="button" class="plusDialUpDown" onclick=amPmClick()>
                         <img src="./src/images/arrowDown.png" class="plusDialUpDownImg">
                     </button>
                 </div>
             </div>
-            <input type="text" id="plusText">
-            <input type="button" value="확인" id="plusConfirm" onclick=plusConfirm()>
-        </div>
+            <input type="text" id="plusText" name="plusContent">
+            <input type="button" value="확인" id="plusConfirm" onclick=confirmPlus()>
+        </form>
     </div>
     <main id="main">
         <div id="monthDiv1" class="monthDiv"></div>
@@ -215,20 +221,18 @@
     </main>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        var plusMonth = 0;
-        var plusDay = 0;
-
         if (<%=isLogin%> == false) {
             alert("먼저 로그인 해주십시오.")
             location.href = "index.jsp";
         } else if (<%=isLogin%> == true) {
             window.onload = function() {
                 flatpickr("#plusMonthDay", {
-                    dateFormat: "n월 j일",
+                    dateFormat: "Y.n.j",
                     onChange: function(selectDates, dateStr, instance){
                         var plusDate = new Date(selectDates);
-                        plusMonth = plusDate.getMonth() + 1;
-                        plusDay = plusDate.getDate();
+                        document.getElementById("innerPlusYear").value = plusDate.getFullYear();
+                        document.getElementById("innerPlusMonth").value = plusDate.getMonth() + 1;
+                        document.getElementById("innerPlusDay").value = plusDate.getDate();
                     }
                 });
             
@@ -279,39 +283,41 @@
             //여기 jsp라이프사이클 때문에 테이블 자체가 없을 수도 있어서 jsp에서 for문 써야함
 
             <%for (int count = 0; count < contentRow; count++) {%>
-                var newDivId = "Month" + "<%=content[count][0]%>" + "Day" + "<%=content[count][1]%>";
+                var month = "<%=content[count][0]%>"
+                var day = "<%=content[count][1]%>"
+                var hour = "<%=content[count][2]%>"
+                var min = "<%=content[count][3]%>"
+                var content = "<%=content[count][4]%>"
+                var newDivId = "Month" + month + "Day" + day;
 
-                var newScheduleDiv = document.createElement("div");
-                newScheduleDiv.setAttribute("class", "scheduleDiv");
-                newScheduleDiv.setAttribute("id", "schedule" + newDivId);
-                document.getElementById("monthDiv" + "<%=content[count][0]%>").appendChild(newScheduleDiv);
-                
-                var newScheduleButton = document.createElement("button");
-                newScheduleButton.setAttribute("class", "scheduleButton");
-                newScheduleButton.setAttribute("onclick", "viewSchedule(" + "<%=content[count][0]%>" + ", " + "<%=content[count][1]%>" + ")");
-                newScheduleButton.innerHTML = "<%=content[count][0]%>" + "월 " + "<%=content[count][1]%>" + "일"
-                document.getElementById("schedule" + newDivId).appendChild(newScheduleButton);
+                if (document.getElementById("schedule" + newDivId) == null) {
+                    var newScheduleDiv = document.createElement("div");
+                    newScheduleDiv.setAttribute("class", "scheduleDiv");
+                    newScheduleDiv.setAttribute("id", "schedule" + newDivId);
+                    document.getElementById("monthDiv" + month).appendChild(newScheduleDiv);
                     
-                var newscheduleContentDiv = document.createElement("div");
-                newscheduleContentDiv.setAttribute("class", "scheduleContentDiv");
-                newscheduleContentDiv.setAttribute("id", "scheduleContentDiv" + newDivId);
-                document.getElementById("schedule" + newDivId).appendChild(newscheduleContentDiv);
-
-                var newScheduleTime = document.createElement("div");
-                newScheduleTime.setAttribute("class", "scheduleTime");
-                if ("<%=content[count][2]%>" > 12) {
-                    var hour = "<%=content[count][2]%>" * 1 - 12;
-                    newScheduleTime.innerHTML = checkHour(hour) + ":" + checkMin(<%=content[count][3]%>) + " PM";
-                } else if ("<%=content[count][2]%>" == 0) {
-                    newScheduleTime.innerHTML = "12:" + checkMin(<%=content[count][3]%>) + " AM";
-                } else {
-                    newScheduleTime.innerHTML = checkHour(<%=content[count][2]%>) + ":" + checkMin(<%=content[count][3]%>) + " AM";
+                    var newScheduleButton = document.createElement("button");
+                    newScheduleButton.setAttribute("class", "scheduleButton");
+                    newScheduleButton.setAttribute("onclick", "viewSchedule(" + month + ", " + day + ")");
+                    newScheduleButton.innerHTML = month + "월 " + day + "일"
+                    document.getElementById("schedule" + newDivId).appendChild(newScheduleButton);
+                        
+                    var newscheduleContentDiv = document.createElement("div");
+                    newscheduleContentDiv.setAttribute("class", "scheduleContentDiv");
+                    newscheduleContentDiv.setAttribute("id", "scheduleContentDiv" + newDivId);
+                    document.getElementById("schedule" + newDivId).appendChild(newscheduleContentDiv);
                 }
-                document.getElementById("scheduleContentDiv" + newDivId).appendChild(newScheduleTime);
-
                 var newScheduleContent = document.createElement("div");
                 newScheduleContent.setAttribute("class", "scheduleContent");
-                newScheduleContent.innerHTML = "기상"
+                if (hour > 12) {
+                    hour = hour * 1 - 12;
+                    newScheduleContent.innerHTML = checkHour(hour) + ":" + checkMin(min) + " PM";
+                } else if (hour == 0) {
+                    newScheduleContent.innerHTML = "12:" + checkMin(min) + " AM";
+                } else {
+                    newScheduleContent.innerHTML = checkHour(hour) + ":" + checkMin(min) + " AM";
+                }
+                newScheduleContent.innerHTML += "&emsp;" + content;
                 document.getElementById("scheduleContentDiv" + newDivId).appendChild(newScheduleContent);
                 
             <%}%>
@@ -350,7 +356,7 @@
             document.getElementById("yearDisplay").value = yearNow;
             document.getElementById("innerDataYear").value = document.getElementById("yearDisplay").value;
             document.getElementById("innerDataUserInYear").value = "<%=account%>";
-            document.getElementById("mvUserDiv").submit();
+            document.getElementById("yearForm").submit();
         }
 
         function mvMonth(month) {
@@ -451,8 +457,30 @@
             changeAmPm();
         }
 
-        function plusConfirm() {
-            return 0;
+        function confirmPlus() {
+            if (document.getElementById("innerPlusYear").value == "" || document.getElementById("innerPlusMonth").value == "" || document.getElementById("innerPlusDay").value == "") {
+                alert("날짜를 선택해 주십시오.");
+                if (document.getElementById("plusDialAmPm").innerHTML == "PM") {
+                    document.getElementById("innerPlusHour").value = document.getElementById("plusDialHour").innerHTML * 1 + 12;
+                } else {
+                    document.getElementById("innerPlusHour").value = document.getElementById("plusDialHour").innerHTML;
+                }
+                console.log(document.getElementById("innerPlusHour").value);
+            } else {
+                if (document.getElementById("plusDialAmPm").innerHTML == "PM") {
+                    document.getElementById("innerPlusHour").value = document.getElementById("plusDialHour").innerHTML * 1 + 12;
+                } else {
+                    document.getElementById("innerPlusHour").value = document.getElementById("plusDialHour").innerHTML;
+                }
+
+                if (document.getElementById("plusDialAmPm").innerHTML == "00") {
+                    document.getElementById("innerPlusMin").value = "0";
+                } else {
+                    document.getElementById("innerPlusMin").value = document.getElementById("plusDialMin").innerHTML;
+                }
+
+                document.getElementById("plusSchedule").submit();
+            }
         }
 
         function viewSchedule(month, day) {

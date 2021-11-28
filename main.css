@@ -10,6 +10,20 @@ nav {
     display: flex;
     flex-direction: column;
     position: fixed;
+    align-items: center;
+}
+
+#mvUserDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-grow: 100;
+}
+
+.mvUserButton {
+    color: black;
+    font-size: 18px;
 }
 
 #editUserButtonDiv {
@@ -35,6 +49,25 @@ header {
     align-items: center;
     position: fixed;
     left: 100px;
+}
+
+#yearForm {
+    display: flex;
+}
+
+#yearDisplay {
+    width: 72px;
+    font-size: 32px;
+    position: relative;
+    bottom: 2px;
+}
+
+#yearDisplay:hover {
+    cursor:default;
+}
+
+#yearDisplay:focus {
+    outline: 0;
 }
 
 .monthButton {
@@ -74,7 +107,7 @@ header {
     object-fit: contain;
 }
 
-#plusmain {
+#plusElements {
     margin-top: 85px;
     margin-left: 100px;
     width: 100%;
@@ -184,25 +217,37 @@ main {
 .scheduleDiv {
     width: 100%;
     margin-left: 24px;
-    display: none;
 }
 
-.schedule {
-    background-color: black;
+.scheduleButton {
     font-size: 24px;
     padding: 8px;
-    margin-left: 16px;
+    display: block;
 }
 
-.scheduleContent {
-    background-color: black;
-    border: 1px solid var(--subColor);
-    flex-grow: 1;
-    margin-right: 130px;
+.scheduleContentDiv {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
 }
 
 .scheduleTime {
-    background-color: black;
+    width: 100px;
     border: 1px solid var(--subColor);
-    padding-right: 16px;
+}
+
+.scheduleContent {
+    flex-grow: 1;
+    border: 1px solid var(--subColor);
+    margin-right: 140px;
+}
+
+.innerData {
+    display: none;
+}
+
+.monthDiv {
+    display: none;
+    width: 100%;
+
 }

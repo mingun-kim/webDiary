@@ -215,7 +215,7 @@ header {
     border-radius: 8px;
 }
 
-main {
+#main {
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -228,12 +228,20 @@ main {
 .scheduleDiv {
     width: 100%;
     margin-left: 24px;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .scheduleButton {
     font-size: 24px;
     padding: 8px;
     display: block;
+}
+
+.delButtonImg {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
 }
 
 .scheduleContentDiv {

@@ -60,6 +60,5 @@
 %>
 
 <script>
-    console.log("<%=hour%>");
     location.href = "main.jsp";
 </script>

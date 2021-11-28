@@ -205,7 +205,11 @@
             <input type="button" value="확인" id="plusConfirm" onclick=confirmPlus()>
         </form>
     </div>
-    <main id="main">
+    <form id="main" action="delSchedule.jsp" method="post">
+        <input id="innerDelYear" name="innerDelYear" type="text" class="innerData">
+        <input id="innerDelMonth" name="innerDelMonth" type="text" class="innerData">
+        <input id="innerDelDay" name="innerDelDay" type="text" class="innerData">
+
         <div id="monthDiv1" class="monthDiv"></div>
         <div id="monthDiv2" class="monthDiv"></div>
         <div id="monthDiv3" class="monthDiv"></div>
@@ -218,7 +222,7 @@
         <div id="monthDiv10" class="monthDiv"></div>
         <div id="monthDiv11" class="monthDiv"></div>
         <div id="monthDiv12" class="monthDiv"></div>
-    </main>
+    </form>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         if (<%=isLogin%> == false) {
@@ -299,8 +303,22 @@
                     var newScheduleButton = document.createElement("button");
                     newScheduleButton.setAttribute("class", "scheduleButton");
                     newScheduleButton.setAttribute("onclick", "viewSchedule(" + month + ", " + day + ")");
+                    newScheduleButton.setAttribute("type", "button");
                     newScheduleButton.innerHTML = month + "월 " + day + "일"
                     document.getElementById("schedule" + newDivId).appendChild(newScheduleButton);
+
+                    if("<%=account%>" == "<%=sessionValue%>") {
+                        var newDelButton = document.createElement("button");
+                        newDelButton.setAttribute("class", "delButton");
+                        newDelButton.setAttribute("id", "delButton" + newDivId);
+                        newDelButton.setAttribute("onclick", "delSchedule(" + month + ", " + day + ")");
+                        document.getElementById("schedule" + newDivId).appendChild(newDelButton);
+
+                        var newDelButtonImg = document.createElement("img");
+                        newDelButtonImg.setAttribute("class", "delButtonImg");
+                        newDelButtonImg.src = "./src/images/bin.png";
+                        document.getElementById("delButton" + newDivId).appendChild(newDelButtonImg);
+                    }
                         
                     var newscheduleContentDiv = document.createElement("div");
                     newscheduleContentDiv.setAttribute("class", "scheduleContentDiv");
@@ -487,6 +505,14 @@
             } else {
                 document.getElementById("scheduleContentDiv" + divId).style.display = "flex";
             }
+        }
+
+        function delSchedule(month, day) {
+            document.getElementById("innerDelYear").value = document.getElementById("yearDisplay").value;
+            document.getElementById("innerDelMonth").value = month;
+            document.getElementById("innerDelDay").value = day;
+
+            document.getElementById("main").submit();
         }
 
         function logout() {

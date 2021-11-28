@@ -70,19 +70,29 @@ header {
     outline: 0;
 }
 
+#monthButtonDiv {
+    flex-grow: 100;
+    overflow-x: scroll;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+#monthButtonDiv::-webkit-scrollbar {
+    height: 10px;
+}
+
+#monthButtonDiv::-webkit-scrollbar-thumb {
+    background-color: var(--subColor);
+}
+
 .monthButton {
-    width: 64px;
+    min-width: 64px;
     height: 64px;
     background-color: black;
     color: var(--mainColor);
     border: solid var(--mainColor) 3px;
     border-radius: 50%;
     font-size: 20px;
-}
-
-.monthButton:focus {
-    background-color: var(--mainColor);
-    color: white;
 }
 
 .LRButtonImg {
@@ -226,7 +236,7 @@ main {
 }
 
 .scheduleContentDiv {
-    display: flex;
+    display: none;
     width: 100%;
     flex-direction: row;
 }
@@ -248,6 +258,8 @@ main {
 
 .monthDiv {
     display: none;
+    flex-direction: column;
+    align-items: flex-start;
     width: 100%;
 
 }

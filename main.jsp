@@ -82,15 +82,16 @@
         }
     }
     int contentRow = 0;
+    String[][] content = null;
     if (isTableExist) {
-        sql = "SELECT * FROM " + wantTable;
+        sql = "SELECT * FROM " + wantTable + " ORDER BY month, day, hour, min";
         pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         rs = pstmt.executeQuery();
 
         rs.last();
         contentRow = rs.getRow();
         rs.beforeFirst();
-        String content[][] = new String[contentRow][5];
+        content = new String[contentRow][5];
 
         i = 0;
         while (rs.next()) {
@@ -138,18 +139,20 @@
                 <img src="./src/images/arrowRight.png" class="LRButtonImg">
             </button>
         </form>
-        <input type="button" value="1" class="monthButton" onclick=mvMonth(1)>
-        <input type="button" value="2" class="monthButton" onclick=mvMonth(2)>
-        <input type="button" value="3" class="monthButton" onclick=mvMonth(3)>
-        <input type="button" value="4" class="monthButton" onclick=mvMonth(4)>
-        <input type="button" value="5" class="monthButton" onclick=mvMonth(5)>
-        <input type="button" value="6" class="monthButton" onclick=mvMonth(6)>
-        <input type="button" value="7" class="monthButton" onclick=mvMonth(7)>
-        <input type="button" value="8" class="monthButton" onclick=mvMonth(8)>
-        <input type="button" value="9" class="monthButton" onclick=mvMonth(9)>
-        <input type="button" value="10" class="monthButton" onclick=mvMonth(10)>
-        <input type="button" value="11" class="monthButton" onclick=mvMonth(11)>
-        <input type="button" value="12" class="monthButton" onclick=mvMonth(12)>
+        <div id="monthButtonDiv">
+            <input type="button" value="1" class="monthButton" onclick=mvMonth(1)>
+            <input type="button" value="2" class="monthButton" onclick=mvMonth(2)>
+            <input type="button" value="3" class="monthButton" onclick=mvMonth(3)>
+            <input type="button" value="4" class="monthButton" onclick=mvMonth(4)>
+            <input type="button" value="5" class="monthButton" onclick=mvMonth(5)>
+            <input type="button" value="6" class="monthButton" onclick=mvMonth(6)>
+            <input type="button" value="7" class="monthButton" onclick=mvMonth(7)>
+            <input type="button" value="8" class="monthButton" onclick=mvMonth(8)>
+            <input type="button" value="9" class="monthButton" onclick=mvMonth(9)>
+            <input type="button" value="10" class="monthButton" onclick=mvMonth(10)>
+            <input type="button" value="11" class="monthButton" onclick=mvMonth(11)>
+            <input type="button" value="12" class="monthButton" onclick=mvMonth(12)>
+        </div>
         <div id="logoutButtonDiv">
             <button id="logoutButton">
                 <img src="./src/images/logoutButton.png" id="logoutButtonImg">
@@ -216,7 +219,6 @@
         var plusDay = 0;
 
         if (<%=isLogin%> == false) {
-            alert("<%=isLogin%>")
             alert("먼저 로그인 해주십시오.")
             location.href = "index.jsp";
         } else if (<%=isLogin%> == true) {
@@ -264,42 +266,71 @@
                         document.getElementById("main").style.left = "0px";
                     }
                 }
+
+                document.getElementById("monthButtonDiv").addEventListener("wheel", (evt) => {
+                evt.preventDefault();
+                document.getElementById("monthButtonDiv").scrollLeft += evt.deltaY;
+                });
             }
         }
 
         function setSchedule() {
             //content불러올 때 rsRow 검사하고 0이면 불러오지 말기(없는데 불러오면 배열 벗어나는 에러남)
-            setScheduleModule();
+            //여기 jsp라이프사이클 때문에 테이블 자체가 없을 수도 있어서 jsp에서 for문 써야함
+
+            <%for (int count = 0; count < contentRow; count++) {%>
+                var newDivId = "Month" + "<%=content[count][0]%>" + "Day" + "<%=content[count][1]%>";
+
+                var newScheduleDiv = document.createElement("div");
+                newScheduleDiv.setAttribute("class", "scheduleDiv");
+                newScheduleDiv.setAttribute("id", "schedule" + newDivId);
+                document.getElementById("monthDiv" + "<%=content[count][0]%>").appendChild(newScheduleDiv);
+                
+                var newScheduleButton = document.createElement("button");
+                newScheduleButton.setAttribute("class", "scheduleButton");
+                newScheduleButton.setAttribute("onclick", "viewSchedule(" + "<%=content[count][0]%>" + ", " + "<%=content[count][1]%>" + ")");
+                newScheduleButton.innerHTML = "<%=content[count][0]%>" + "월 " + "<%=content[count][1]%>" + "일"
+                document.getElementById("schedule" + newDivId).appendChild(newScheduleButton);
+                    
+                var newscheduleContentDiv = document.createElement("div");
+                newscheduleContentDiv.setAttribute("class", "scheduleContentDiv");
+                newscheduleContentDiv.setAttribute("id", "scheduleContentDiv" + newDivId);
+                document.getElementById("schedule" + newDivId).appendChild(newscheduleContentDiv);
+
+                var newScheduleTime = document.createElement("div");
+                newScheduleTime.setAttribute("class", "scheduleTime");
+                if ("<%=content[count][2]%>" > 12) {
+                    var hour = "<%=content[count][2]%>" * 1 - 12;
+                    newScheduleTime.innerHTML = checkHour(hour) + ":" + checkMin(<%=content[count][3]%>) + " PM";
+                } else if ("<%=content[count][2]%>" == 0) {
+                    newScheduleTime.innerHTML = "12:" + checkMin(<%=content[count][3]%>) + " AM";
+                } else {
+                    newScheduleTime.innerHTML = checkHour(<%=content[count][2]%>) + ":" + checkMin(<%=content[count][3]%>) + " AM";
+                }
+                document.getElementById("scheduleContentDiv" + newDivId).appendChild(newScheduleTime);
+
+                var newScheduleContent = document.createElement("div");
+                newScheduleContent.setAttribute("class", "scheduleContent");
+                newScheduleContent.innerHTML = "기상"
+                document.getElementById("scheduleContentDiv" + newDivId).appendChild(newScheduleContent);
+                
+            <%}%>
         }
 
+        function checkHour (hour) {
+            if (hour < 10) {
+                return "0" + hour;
+            } else {
+                return hour;
+            }
+        }
 
-        function setScheduleModule() {
-            var newScheduleDiv = document.createElement("div");
-            newScheduleDiv.setAttribute("class", "scheduleDiv");
-            newScheduleDiv.setAttribute("id", "scheduleDiv");
-            document.getElementById("main").appendChild(newScheduleDiv);
-            
-            var newSchedule = document.createElement("button");
-            newSchedule.setAttribute("class", "scheduleButton");
-            newSchedule.setAttribute("onclick", "viewSchedule()");
-            newSchedule.innerHTML = "1월 1일"
-            document.getElementById("scheduleDiv").appendChild(newSchedule);
-            
-            var newscheduleContentDiv = document.createElement("div");
-            newscheduleContentDiv.setAttribute("class", "scheduleContentDiv");
-            newscheduleContentDiv.setAttribute("id", "scheduleContentDiv");
-            document.getElementById("scheduleDiv").appendChild(newscheduleContentDiv);
-
-            var newScheduleTime = document.createElement("div");
-            newScheduleTime.setAttribute("class", "scheduleTime");
-            newScheduleTime.innerHTML = "06:30 AM"
-            document.getElementById("scheduleContentDiv").appendChild(newScheduleTime);
-
-            var newScheduleContent = document.createElement("div");
-            newScheduleContent.setAttribute("class", "scheduleContent");
-            newScheduleContent.innerHTML = "기상"
-            document.getElementById("scheduleContentDiv").appendChild(newScheduleContent);
-            
+        function checkMin (min) {
+            if (min == 0) {
+                return "00";
+            } else {
+                return min;
+            }
         }
 
         function mvUser (userSeq) {
@@ -324,12 +355,17 @@
 
         function mvMonth(month) {
             var monthDivArr = document.getElementsByClassName("monthDiv");
+            var monthBtnArr = document.getElementsByClassName("monthButton");
 
             for (var i = 0; i < 12; i++) {
                 if (i == month - 1) {
                     monthDivArr[i].style.display = "flex";
+                    monthBtnArr[i].style.backgroundColor = "#9A0000";
+                    monthBtnArr[i].style.color = "white";
                 } else {
                     monthDivArr[i].style.display = "none";
+                    monthBtnArr[i].style.backgroundColor = "black";
+                    monthBtnArr[i].style.color = "#9A0000";
                 }
             }
         }
@@ -419,11 +455,12 @@
             return 0;
         }
 
-        function viewSchedule() {
-            if (document.getElementById("scheduleContentDiv").style.display == "flex") {
-                document.getElementById("scheduleContentDiv").style.display = "none";
+        function viewSchedule(month, day) {
+            var divId = "Month" + month + "Day" + day;
+            if (document.getElementById("scheduleContentDiv" + divId).style.display == "flex") {
+                document.getElementById("scheduleContentDiv" + divId).style.display = "none";
             } else {
-                document.getElementById("scheduleContentDiv").style.display = "flex";
+                document.getElementById("scheduleContentDiv" + divId).style.display = "flex";
             }
         }
     </script>

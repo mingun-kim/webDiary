@@ -11,48 +11,96 @@
     <link rel="stylesheet" type="text/css" href="./editUser.css">
 </head>
 <body>
-    <form id="editUserForm">
+    <form id="editUserForm" action="createDelUser.jsp" method=post>
+        <input type="text" id="innerCreatePower" name="innerCreatePower" class="innerData">
+        <input type="text" id="isDel" name="isDel" class="innerData">
         <table id="editTable">
             <tr class="editTr">
                 <td class="editTd">
                     <table id="createTable">
                         <tr>
                             <td class="editUserText">회원 아이디:</td>
-                            <td><input type="text" class="editUserInput"></td>
+                            <td><input type="text" class="editUserInput" id="userId" name="userId"></td>
                         </tr>
                         <tr>
                             <td class="editUserText">회원 비밀번호:</td>
-                            <td><input type="password" class="editUserInput"></td>
+                            <td><input type="password" class="editUserInput" id="userPw" name="userPw"></td>
                         </tr>
                         <tr>
                             <td class="editUserText">비밀번호 확인:</td>
-                            <td><input type="password" class="editUserInput"></td>
-                        </tr>
-                        <tr>
-                            <td class="editUserText">사원 이름:</td>
-                            <td><input type="text" class="editUserInput"></td>
+                            <td><input type="password" class="editUserInput" id="userPwConfirm"></td>
                         </tr>
                         <tr>
                             <td class="editUserText">회원 권한:</td>
-                            <td><div id="editUserAuthority"><input type="button" value="일반" class="authorityButton"><input type="button" value="파트장" class="authorityButton"></div></td>
+                            <td>
+                                <div id="editUserAuthority">
+                                    <input type="button" value="일반" class="authorityButton" onclick=setPower(0)>
+                                    <input type="button" value="파트장" class="authorityButton" onclick=setPower(1)>
+                                </div>
+                            </td>
                         </tr>
                     </table>
                 </td>
                 <td class="editTd"><div id="deleteUserList"></div></td>
             </tr>
             <tr class="editTr">
-                <td class="editTd"><input type="button" value="회원 생성" class="createDeleteButton"></td>
-                <td class="editTd"><input type="button" value="회원 삭제" class="createDeleteButton"></td>
+                <td class="editTd"><input type="button" value="회원 생성" class="createDeleteButton" onclick=createUser()></td>
+                <td class="editTd"><input type="button" value="회원 삭제" class="createDeleteButton" onclick=delUser()></td>
             </tr>
         </table>
     </form>
-    <button id="logoutButton">
+    <button id="logoutButton" onclick=logout()>
         <img src="./src/images/logoutButton.png" id="logoutButtonImg">
     </button>
     <button id="backButton">
         <img src="./src/images/backArrow.png" id="backButtonImg" onclick=backToDiary()>
     </button>
     <script>
+        function setPower(power) {
+            document.getElementById("innerCreatePower").value=power;
+
+            var powerButton = document.getElementsByClassName("authorityButton");
+            if (power == 0) {
+                powerButton[0].style.backgroundColor = "#9A0000";
+                powerButton[0].style.color = "white";
+                powerButton[1].style.backgroundColor = "black";
+                powerButton[1].style.color = "#9A0000";
+            } else {
+                powerButton[1].style.backgroundColor = "#9A0000";
+                powerButton[1].style.color = "white";
+                powerButton[0].style.backgroundColor = "black";
+                powerButton[0].style.color = "#9A0000";
+            }
+        }
+
+        function createUser() {
+            document.getElementById("isDel").value = "";
+            if (document.getElementById("userId").value == "") {
+                alert("아이디를 입력해주세요.")
+            } else if (document.getElementById("userPw").value == "") {
+                alert("비밀번호를 입력해주세요.")
+            } else if (document.getElementById("userPwConfirm").value != document.getElementById("userPw").value) {
+                alert("비밀번호와 비밀번호 확인이 틀립니다.")
+            } else if (document.getElementById("innerCreatePower").value == "") {
+                alert("회원 권한을 선택해주세요.")
+            } else {
+                document.getElementById("editUserForm").submit();
+            }
+        }
+
+        function delUser() {
+            document.getElementById("isDel").value = "O";
+        }
+
+        function logout() {
+            deleteCookie("account");
+            location.href = "index.jsp";   
+        }
+        
+        function deleteCookie(name) {
+            document.cookie = name + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;";
+        }
+
         function backToDiary() {
             location.href = "main.jsp"
         }

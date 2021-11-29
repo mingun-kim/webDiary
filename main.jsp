@@ -91,7 +91,7 @@
         rs.last();
         contentRow = rs.getRow();
         rs.beforeFirst();
-        content = new String[contentRow][5];
+        content = new String[contentRow][6];
 
         i = 0;
         while (rs.next()) {
@@ -100,6 +100,7 @@
             content[i][2] = Integer.toString(rs.getInt("hour"));
             content[i][3] = Integer.toString(rs.getInt("min"));
             content[i][4] = rs.getString("content");
+            content[i][5] = Integer.toString(rs.getInt("seq"));
             i++;
         }
     }
@@ -205,9 +206,8 @@
         </form>
     </div>
     <form id="main" action="delSchedule.jsp" method="post">
+        <input id="innerDelSeq" name="innerDelSeq" type="text" class="innerData">
         <input id="innerDelYear" name="innerDelYear" type="text" class="innerData">
-        <input id="innerDelMonth" name="innerDelMonth" type="text" class="innerData">
-        <input id="innerDelDay" name="innerDelDay" type="text" class="innerData">
 
         <div id="monthDiv1" class="monthDiv"></div>
         <div id="monthDiv2" class="monthDiv"></div>
@@ -298,6 +298,7 @@
                 var hour = "<%=content[count][2]%>"
                 var min = "<%=content[count][3]%>"
                 var content = "<%=content[count][4]%>"
+                var seq = "<%=content[count][5]%>"
                 var newDivId = "Month" + month + "Day" + day;
 
                 if (document.getElementById("schedule" + newDivId) == null) {
@@ -313,19 +314,6 @@
                     newScheduleButton.innerHTML = month + "월 " + day + "일"
                     document.getElementById("schedule" + newDivId).appendChild(newScheduleButton);
 
-                    if("<%=account%>" == "<%=sessionValue%>") {
-                        var newDelButton = document.createElement("button");
-                        newDelButton.setAttribute("class", "delButton");
-                        newDelButton.setAttribute("id", "delButton" + newDivId);
-                        newDelButton.setAttribute("onclick", "delSchedule(" + month + ", " + day + ")");
-                        document.getElementById("schedule" + newDivId).appendChild(newDelButton);
-
-                        var newDelButtonImg = document.createElement("img");
-                        newDelButtonImg.setAttribute("class", "delButtonImg");
-                        newDelButtonImg.src = "./src/images/bin.png";
-                        document.getElementById("delButton" + newDivId).appendChild(newDelButtonImg);
-                    }
-                        
                     var newscheduleContentDiv = document.createElement("div");
                     newscheduleContentDiv.setAttribute("class", "scheduleContentDiv");
                     newscheduleContentDiv.setAttribute("id", "scheduleContentDiv" + newDivId);
@@ -333,16 +321,38 @@
                 }
                 var newScheduleContent = document.createElement("div");
                 newScheduleContent.setAttribute("class", "scheduleContent");
+                newScheduleContent.setAttribute("id", "scheduleContent" + seq);
+                document.getElementById("scheduleContentDiv" + newDivId).appendChild(newScheduleContent);
+                
+                var newContentTime = document.createElement("div");
+                newContentTime.setAttribute("class", "contentTime");
                 if (hour > 12) {
                     hour = hour * 1 - 12;
-                    newScheduleContent.innerHTML = checkHour(hour) + ":" + checkMin(min) + " PM";
+                    newContentTime.innerHTML = checkHour(hour) + ":" + checkMin(min) + " PM";
                 } else if (hour == 0) {
-                    newScheduleContent.innerHTML = "12:" + checkMin(min) + " AM";
+                    newContentTime.innerHTML = "12:" + checkMin(min) + " AM";
                 } else {
-                    newScheduleContent.innerHTML = checkHour(hour) + ":" + checkMin(min) + " AM";
+                    newContentTime.innerHTML = checkHour(hour) + ":" + checkMin(min) + " AM";
                 }
-                newScheduleContent.innerHTML += "&emsp;" + content;
-                document.getElementById("scheduleContentDiv" + newDivId).appendChild(newScheduleContent);
+                document.getElementById("scheduleContent" + seq).appendChild(newContentTime);
+
+                var newContentText = document.createElement("div");
+                newContentText.setAttribute("class", "contentText");
+                newContentText.innerHTML = content;
+                document.getElementById("scheduleContent" + seq).appendChild(newContentText);
+
+                if("<%=account%>" == "<%=sessionValue%>") {
+                    var newDelButton = document.createElement("button");
+                    newDelButton.setAttribute("class", "delButton");
+                    newDelButton.setAttribute("id", "delButton" + seq);
+                    newDelButton.setAttribute("onclick", "delSchedule(" + seq + ")");
+                    document.getElementById("scheduleContent" + seq).appendChild(newDelButton);
+
+                    var newDelButtonImg = document.createElement("img");
+                    newDelButtonImg.setAttribute("class", "delButtonImg");
+                    newDelButtonImg.src = "./src/images/bin.png";
+                    document.getElementById("delButton" + seq).appendChild(newDelButtonImg);
+                }
                 
             <%}%>
         }
@@ -513,12 +523,14 @@
             }
         }
 
-        function delSchedule(month, day) {
-            document.getElementById("innerDelYear").value = document.getElementById("yearDisplay").value;
-            document.getElementById("innerDelMonth").value = month;
-            document.getElementById("innerDelDay").value = day;
-
-            document.getElementById("main").submit();
+        function delSchedule(seq) {
+            if (confirm("정말 삭제하시겠습니까?")) {
+                document.getElementById("innerDelSeq").value = seq;
+                document.getElementById("innerDelYear").value = document.getElementById("yearDisplay").value;
+                document.getElementById("main").submit();
+            } else {
+                return;
+            }
         }
 
         function logout() {

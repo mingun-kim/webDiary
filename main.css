@@ -264,6 +264,17 @@ header {
 .scheduleContent {
     align-self: stretch;
     border: 1px solid var(--subColor);
+    display: flex;
+}
+
+.contentTime {
+    width: 100px;
+    border-right: 1px solid var(--subColor);
+}
+
+.contentText {
+    flex-grow: 1;
+    border-right: 1px solid var(--subColor);
 }
 
 .innerData {

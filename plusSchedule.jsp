@@ -23,7 +23,7 @@
         String hour = request.getParameter("innerPlusHour");
         String min = request.getParameter("innerPlusMin");
         String content = request.getParameter("plusContent");
-        content = content.replaceAll("(\r\n|\r|\n|\n\r)", "<br/>&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;");
+        content = content.replaceAll("(\r\n|\r|\n|\n\r)", "<br/>");
 
         for (int i = 0; i < cookies.length; i++) {
             Cookie c = cookies[i];
@@ -49,11 +49,11 @@
         }
 
         if (isTableExist == false) {
-            sql = "CREATE TABLE " + wantTable + "(month TINYINT, day TINYINT, hour TINYINT, min TINYINT, content TEXT)";
+            sql = "CREATE TABLE " + wantTable + "(seq INTEGER PRIMARY KEY AUTO_INCREMENT, month TINYINT, day TINYINT, hour TINYINT, min TINYINT, content TEXT)";
             pstmt = conn.prepareStatement(sql);
             pstmt.executeUpdate();
         }
-        sql = "INSERT INTO " + wantTable + " VALUES(?, ?, ?, ?, ?)";
+        sql = "INSERT INTO " + wantTable + "(month, day, hour, min, content) VALUES(?, ?, ?, ?, ?)";
         pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, month);
         pstmt.setString(2, day);

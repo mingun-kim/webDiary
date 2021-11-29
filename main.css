@@ -223,6 +223,16 @@ header {
     top: 85px;
     left: 100px;
     width: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#main::-webkit-scrollbar {
+    height: 10px;
+}
+
+#main::-webkit-scrollbar-thumb {
+    background-color: var(--subColor);
 }
 
 .scheduleDiv {
@@ -248,12 +258,12 @@ header {
     display: none;
     width: 100%;
     flex-direction: column;
+    margin-right: 50px;
 }
 
 .scheduleContent {
     align-self: stretch;
     border: 1px solid var(--subColor);
-    margin-right: 140px;
 }
 
 .innerData {
@@ -261,11 +271,11 @@ header {
 }
 
 .monthDiv {
+    margin: 8px;
     display: none;
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
-
 }
 
 

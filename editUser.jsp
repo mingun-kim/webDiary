@@ -68,15 +68,15 @@
                     <table id="createTable">
                         <tr>
                             <td class="editUserText">회원 아이디:</td>
-                            <td><input type="text" class="editUserInput" id="userId" name="userId"></td>
+                            <td><input type="text" class="editUserInput" id="userId" name="userId" maxlength="20"></td>
                         </tr>
                         <tr>
                             <td class="editUserText">회원 비밀번호:</td>
-                            <td><input type="password" class="editUserInput" id="userPw" name="userPw"></td>
+                            <td><input type="password" class="editUserInput" id="userPw" name="userPw" maxlength="20"></td>
                         </tr>
                         <tr>
                             <td class="editUserText">비밀번호 확인:</td>
-                            <td><input type="password" class="editUserInput" id="userPwConfirm"></td>
+                            <td><input type="password" class="editUserInput" id="userPwConfirm" maxlength="20"></td>
                         </tr>
                         <tr>
                             <td class="editUserText">회원 권한:</td>
@@ -139,9 +139,10 @@
         }
 
         function createUser() {
-            document.getElementById("isDel").value = "";
             if (document.getElementById("userId").value == "") {
                 alert("아이디를 입력해주세요.")
+            } else if (doublecheckId(document.getElementById("userId").value)) {
+                alert("이미 있는 아이디입니다.");
             } else if (document.getElementById("userPw").value == "") {
                 alert("비밀번호를 입력해주세요.")
             } else if (document.getElementById("userPwConfirm").value != document.getElementById("userPw").value) {
@@ -149,16 +150,34 @@
             } else if (document.getElementById("innerCreatePower").value == "") {
                 alert("회원 권한을 선택해주세요.")
             } else {
+                document.getElementById("isDel").value = "X";
                 document.getElementById("editUserForm").submit();
             }
         }
 
+        function doublecheckId(id) {
+            if (id == "admin") {
+                return true;
+            }
+            var existIdArr = document.getElementsByClassName("selectUser");
+            for (var i = 0; i < <%=userIdRow%> - 1; i++) {
+                if (id == existIdArr[i].innerHTML) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         function delUser() {
-            document.getElementById("isDel").value = "O";
             if (document.getElementById("innerDelUser").value == "") {
                 alert("삭제할 회원을 선택해주세요.");
             } else {
-                document.getElementById("editUserForm").submit();
+                if (confirm("정말 삭제하시겠습니까?")) {
+                    document.getElementById("isDel").value = "O";
+                    document.getElementById("editUserForm").submit();
+                } else {
+                    return;
+                }
             }
         }
 

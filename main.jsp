@@ -229,6 +229,13 @@
             location.href = "index.jsp";
         } else if (<%=isLogin%> == true) {
             window.onload = function() {
+                var bodyWidth = document.body.offsetWidth;
+                var bodyHeight = document.body.offsetHeight;
+                bodyWidth -= 100;
+                bodyHeight -= 85;
+                document.getElementById("main").style.width = bodyWidth + "px";
+                document.getElementById("main").style.height = bodyHeight + "px";
+
                 flatpickr("#plusMonthDay", {
                     dateFormat: "Y.n.j",
                     onChange: function(selectDates, dateStr, instance){

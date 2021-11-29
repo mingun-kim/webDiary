@@ -13,16 +13,22 @@
     Cookie[] cookies = request.getCookies();
     String cValue = null;
 
+    Class.forName("com.mysql.jdbc.Driver");
+    conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/diarydata?useUnicode=true&characterEncoding=UTF-8" , "ubuntu", "1234");
+
     String isDel = request.getParameter("isDel");
-    String account = request.getParameter("userId");
-    String password = request.getParameter("userPw");
-    String power = request.getParameter("innerCreatePower");
     if (isDel.equals("O")) {
+        String account = request.getParameter("innerDelUser");
+        String sql = "DELETE FROM user_login WHERE account=?";
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, account);
+        pstmt.executeUpdate();
 
     } else {
-        Class.forName("com.mysql.jdbc.Driver");
-        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/diarydata?useUnicode=true&characterEncoding=UTF-8" , "ubuntu", "1234");
-
+        String account = request.getParameter("userId");
+        String password = request.getParameter("userPw");
+        String power = request.getParameter("innerCreatePower");
+    
         String sql = "INSERT INTO user_login(account, password, auth) VALUES(?, ?, ?)";
         pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, account);

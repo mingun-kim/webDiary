@@ -61,6 +61,7 @@
     <form id="editUserForm" action="createDelUser.jsp" method=post>
         <input type="text" id="innerCreatePower" name="innerCreatePower" class="innerData">
         <input type="text" id="isDel" name="isDel" class="innerData">
+        <input type="text" id="innerDelUser" name="innerDelUser" class="innerData">
         <table id="editTable">
             <tr class="editTr">
                 <td class="editTd">
@@ -107,8 +108,9 @@
             if (<%=isLogin%>) {
                 <%for (int count = 1; count < userIdRow; count++) {%>
                     var newUserId = document.createElement("button");
-                    newUserId.setAttribute("class", "mvUserButton");
-                    newUserId.setAttribute("onclick", "mvUser(" + "<%=count + 1%>" + ")");
+                    newUserId.setAttribute("class", "selectUser");
+                    newUserId.setAttribute("onclick", "selectUser(" + "<%=count - 1%>" + ")");
+                    newUserId.setAttribute("type", "button");
                     newUserId.innerHTML = "<%=userId[count]%>"
                     document.getElementById("deleteUserList").appendChild(newUserId);
                 <%}%>
@@ -153,6 +155,11 @@
 
         function delUser() {
             document.getElementById("isDel").value = "O";
+            if (document.getElementById("innerDelUser").value == "") {
+                alert("삭제할 회원을 선택해주세요.");
+            } else {
+                document.getElementById("editUserForm").submit();
+            }
         }
 
         function logout() {
@@ -166,6 +173,20 @@
 
         function backToDiary() {
             location.href = "main.jsp"
+        }
+
+        function selectUser(user) {
+            var userArr = document.getElementsByClassName("selectUser");
+            for (var i = 0; i < <%=userIdRow%> - 1; i++) {
+                if (i == user) {
+                    userArr[i].style.color = "white";
+                    userArr[i].style.fontWeight = "700";
+                    document.getElementById("innerDelUser").value = userArr[i].innerHTML;
+                } else {
+                    userArr[i].style.color = "black";
+                    userArr[i].style.fontWeight = "600";
+                }
+            }
         }
     </script>
 </body>

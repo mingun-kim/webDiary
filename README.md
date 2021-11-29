@@ -16,6 +16,20 @@ HELLO README
 
 ![이미지 참조 불가](./src/images/plus.png)
 
+```
+hello world!
+```
+
+```html
+<div>
+        <h1>hello world!<h1>
+</div>
+```
+
+```python
+print("hello world!")
+```
+
 <!-- 
 공백은
 한 줄 띔

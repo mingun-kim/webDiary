@@ -111,8 +111,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=yes">    <title>Document</title>
     <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
     <link rel="stylesheet" type="text/css" href="./common.css">
     <link rel="stylesheet" type="text/css" href="./main.css">
@@ -396,7 +395,7 @@
 
         function plusSchedule() {
             if (document.getElementById("plusSchedule").style.bottom == "0px") {
-                document.getElementById("plusSchedule").style.bottom = "100vw";
+                document.getElementById("plusSchedule").style.bottom = "200vw";
             } else {
                 document.getElementById("plusSchedule").style.bottom = "0px";
             }

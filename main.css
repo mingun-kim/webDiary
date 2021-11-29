@@ -131,7 +131,7 @@ header {
     display: flex;
     flex-direction: column;
     position: relative;
-    bottom: 100vw;
+    bottom: 200vw;
     z-index: 1;
     background-color: black;
 }
@@ -266,4 +266,27 @@ header {
     align-items: flex-start;
     width: 100%;
 
+}
+
+
+@media( orientation: portrait ){
+    html {
+        transform: rotate(-90deg);
+        transform-origin: top left;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100vh;
+        height: 100vw;
+    }
+    nav {
+        height: 100vw;
+    }
+    header {
+        width: 100vh;
+    }
+    body {
+        width: 100vh;
+        height: 100vw;
+    }
 }
